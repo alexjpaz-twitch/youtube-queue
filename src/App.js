@@ -13,6 +13,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+import TimeAgo from 'javascript-time-ago'
+import ReactTimeAgo from 'react-time-ago'
+
+import en from 'javascript-time-ago/locale/en'
+
+TimeAgo.addDefaultLocale(en)
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -34,6 +41,7 @@ function App() {
     ComfyJS.onReward = ( user, reward, cost, message, extra ) => {
       const item = {
         key: JSON.stringify([ user, reward, message, new Date().getTime() ]),
+        date: new Date(),
         user,
         reward,
         message
@@ -56,6 +64,7 @@ function App() {
           <TableHead>
             <TableRow>
               <TableCell>User</TableCell>
+              <TableCell>Time</TableCell>
               <TableCell align="left">message</TableCell>
             </TableRow>
           </TableHead>
@@ -64,6 +73,11 @@ function App() {
               <TableRow key={row.key}>
                 <TableCell component="th" scope="row">
                   {row.user}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  { row.date &&
+                  <ReactTimeAgo date={row.date} locale="en-US"/>
+                  }
                 </TableCell>
                 <TableCell align="left">
                   <Linkify properties={{target: '_blank'}}>{row.message}</Linkify>
