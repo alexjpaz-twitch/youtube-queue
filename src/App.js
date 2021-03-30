@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 function App() {
   const classes = useStyles();
 
-  const [ rewardQueue, setRewardQueue ] = React.useState([]);
+  const [ rewardQueue, setRewardQueue ] = React.useState(JSON.parse(localStorage.getItem("alexjpaz-twitch/linkify-queue")) || []);
 
   useEffect(() => {
     const channel = new URLSearchParams(window.location.hash.slice(1)).get("channel");
@@ -39,9 +39,11 @@ function App() {
         message
       };
 
-      console.log(item);
-
-      setRewardQueue(q => [ ...q, item ]);
+      setRewardQueue(q => {
+        const newq = [ item, ...q ].slice(0, 25);
+        localStorage.setItem("alexjpaz-twitch/linkify-queue", JSON.stringify(newq));
+        return newq;
+      });
     }
 
     ComfyJS.Init( channel, token );
